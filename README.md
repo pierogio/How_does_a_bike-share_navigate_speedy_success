@@ -3,8 +3,10 @@
 [![forthebadge made-with-R](https://img.shields.io/badge/Made%20with-R-blue?style=for-the-badge&logo=R)](https://www.r-project.org/)
 [![forthebadge made-with-RStudio](https://img.shields.io/badge/Made%20with-RStudio-blue?style=for-the-badge&logo=RStudio)](https://www.rstudio.com/)
 
-The goal of this project is to create monthly predictions for the Ethereum cryptocurrency price and to identify correlations between its price fluctuations and the fluctuations of other financial assets for educational purposes only. It's important to note that cryptocurrency price prediction is challenging due to the extreme volatility of these assets.
+**Introduction**
+Welcome to my Cyclistic bike-share analysis project! In this case study, I step into the role of a junior data analyst for the fictional company Cyclistic. The goal of this project is to solve key business questions using real-world data. I'll be following the complete data analysis process—asking questions, preparing and analyzing data, and sharing insights to drive business decisions.
 
+Through this project, I aim to demonstrate my analytical skills while exploring bike-share usage patterns and trends. 
 What is Ethereum?
 
 Ethereum is a decentralized blockchain platform and cryptocurrency introduced in 2015. It's known for its innovation with smart contracts, self-executing agreements written in code. Ethereum's native cryptocurrency is Ether (ETH), used for transactions and running smart contracts. It's a foundation for decentralized applications (DApps) across various industries and introduced the concept of Decentralized Autonomous Organizations (DAOs). Ethereum has undergone upgrades, like Ethereum 2.0, to improve scalability and efficiency. It remains a central player in the evolving blockchain and cryptocurrency space.
