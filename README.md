@@ -16,7 +16,9 @@ You are a junior data analyst on the marketing team at Cyclistic, a bike-share c
 
 **Director of Marketing (Lily Moreno)**  
 Oversees marketing strategy and uses data insights to convert casual riders into annual members.
+
 **Marketing Analytics Team**  
 Collects and analyzes data to inform marketing strategies.
+
 **Cyclistic Executive Team**  
 Approves marketing strategies based on data-driven insights.
