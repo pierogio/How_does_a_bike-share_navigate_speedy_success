@@ -6,9 +6,11 @@
 **Introduction**
 
 Welcome to my Cyclistic bike-share analysis project! In this case study, I step into the role of a junior data analyst for the fictional company Cyclistic. The goal of this project is to solve key business questions using real-world data. I'll be following the complete data analysis process—asking questions, preparing and analyzing data, and sharing insights to drive business decisions.
-
 Through this project, I aim to demonstrate my analytical skills while exploring bike-share usage patterns and trends. 
-What is Ethereum?
+
+**Scenario**
+
+You are a junior data analyst on the marketing team at Cyclistic, a bike-share company in Chicago. The company’s director of marketing, Lily Moreno, believes increasing annual memberships is key to Cyclistic's growth. Your team is tasked with understanding how casual riders and annual members use the service differently to inform a new marketing strategy aimed at converting casual riders into annual members. Before implementing any recommendations, the executive team needs to approve your insights, which must be supported by data-driven analysis and professional visualizations.
 
 Ethereum is a decentralized blockchain platform and cryptocurrency introduced in 2015. It's known for its innovation with smart contracts, self-executing agreements written in code. Ethereum's native cryptocurrency is Ether (ETH), used for transactions and running smart contracts. It's a foundation for decentralized applications (DApps) across various industries and introduced the concept of Decentralized Autonomous Organizations (DAOs). Ethereum has undergone upgrades, like Ethereum 2.0, to improve scalability and efficiency. It remains a central player in the evolving blockchain and cryptocurrency space.
 
