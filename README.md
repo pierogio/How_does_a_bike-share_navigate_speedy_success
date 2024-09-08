@@ -4,6 +4,7 @@
 [![forthebadge made-with-RStudio](https://img.shields.io/badge/Made%20with-RStudio-blue?style=for-the-badge&logo=RStudio)](https://www.rstudio.com/)
 
 **Introduction**
+
 Welcome to my Cyclistic bike-share analysis project! In this case study, I step into the role of a junior data analyst for the fictional company Cyclistic. The goal of this project is to solve key business questions using real-world data. I'll be following the complete data analysis process—asking questions, preparing and analyzing data, and sharing insights to drive business decisions.
 
 Through this project, I aim to demonstrate my analytical skills while exploring bike-share usage patterns and trends. 
