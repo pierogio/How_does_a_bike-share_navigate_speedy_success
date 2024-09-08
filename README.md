@@ -23,12 +23,13 @@ Collects and analyzes data to inform marketing strategies.
 **Cyclistic Executive Team**  
 Approves marketing strategies based on data-driven insights.
 
-### About the Company
+## About the Company
 
 Cyclistic launched a bike-share program in 2016, now offering 5,824 bikes across 692 stations in Chicago. The bikes can be unlocked and returned at any station in the system. Cyclistic's marketing strategy has focused on general awareness with flexible pricing options: single-ride passes, full-day passes, and annual memberships.
 Casual riders use single-ride or full-day passes, while annual members are more profitable. Cyclistic's finance team has emphasized the importance of growing the annual membership base for future success. Marketing director Lily Moreno aims to convert casual riders into members, believing they are already familiar with Cyclistic. To develop targeted strategies, the team will analyze historical bike trip data to understand rider behaviors and how digital media can support these efforts.
 
-### Task Overview
+### ASK
+## Task Overview
 
 Three key questions guide the future marketing strategy:
 1. How do annual members and casual riders use Cyclistic bikes differently?
@@ -37,7 +38,7 @@ Three key questions guide the future marketing strategy:
 
 Your task is to address the first question: ***How do annual members and casual riders use Cyclistic bikes differently?***
 
-#### Deliverables:
+## Deliverables:
 
 1. A clear statement of the business task
 2. A description of all data sources used
