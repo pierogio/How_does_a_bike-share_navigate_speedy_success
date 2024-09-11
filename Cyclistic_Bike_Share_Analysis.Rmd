@@ -1,0 +1,296 @@
+# Loading and Exploring Data
+# First, we need to set the working directory, load the necessary libraries, and load the data.
+
+# Set working directory to where the data files are located
+# Change the path to the location where your data files are stored
+setwd("C:/Users/ASUSPC/Google_Data_Analytics")
+
+# Load necessary libraries
+# tidyverse: a collection of R packages for data manipulation and visualization
+# lubridate: for working with date and time data
+# janitor: for cleaning data
+# ggplot2: for data visualization
+library(tidyverse)
+library(lubridate)
+library(janitor)
+library(ggplot2)
+
+# Load the data
+# List all CSV files in the specified directory
+data_files <- list.files(path = "C:/Users/ASUSPC/Google_Data_Analytics", pattern = "*.csv")
+
+# Read and combine all CSV files into a single dataframe
+bike_data <- data_files %>%
+  map_df(~read_csv(.))
+
+# ================================================================================================
+# Data Overview
+# Understand the types of variables and their format
+str(bike_data)
+
+```
+Column Descriptions
+
+**ride_id**: Unique identifier for each ride.
+**rideable_type**: Type of bike used (e.g., electric, classic).
+**started_at**: Start date and time of the ride.
+**ended_at**: End date and time of the ride.
+**start_station_name**: Name of the start station.
+**start_station_id**: ID of the start station.
+**end_station_name**: Name of the end station.
+**end_station_id**: ID of the end station.
+**start_lat**: Latitude of the start location.
+**start_lng**: Longitude of the start location.
+**end_lat**: Latitude of the end location.
+**end_lng**: Longitude of the end location.
+**member_casual**: Type of user (member or casual).
+```
+
+# Selecting only the relevant columns from the bike_data dataframe
+
+bike_data <- bike_data %>%
+  select(
+    ride_id,
+    rideable_type,
+    started_at,
+    ended_at,
+    start_station_name,
+    end_station_name,
+    member_casual
+  )
+
+
+# Display column names
+names(bike_data)
+
+# Check for NA values
+colSums(is.na(bike_data)) 
+
+```
+As for the analysis we can see that "start_station_name" have 690,809 missing values, while  "end_station_name" have 739,170 missing values.
+Since we cannot fill those values, the option left is to remove them.
+```
+# =======================================================================================================
+# Process
+# Data Cleaning
+# Remove rows where either 'start_station_name' or 'end_station_name' has missing values
+bike_data_clean <- bike_data %>%
+  drop_na(start_station_name, end_station_name)
+
+# Check for NA
+colSums(is.na(bike_data_clean))
+
+# Add ride_length column
+# ride_length is calculated as the difference between ended_at and started_at in minutes
+bike_data_clean <- bike_data_clean %>%
+  mutate(ride_length = as.numeric(difftime(ended_at, started_at, units = "mins")))
+  
+# Check the data types and preview the data
+glimpse(bike_data_clean)
+
+# ====================================================================================================================
+# Analyze
+
+# Compute summary statistics for ride length by user type
+summary_stats <- bike_data_clean %>%
+  group_by(member_casual) %>%
+  summarise(
+    mean_ride_length = mean(ride_length, na.rm = TRUE),
+    median_ride_length = median(ride_length, na.rm = TRUE),
+    sd_ride_length = sd(ride_length, na.rm = TRUE),
+    min_ride_length = min(ride_length, na.rm = TRUE),
+    max_ride_length = max(ride_length, na.rm = TRUE)
+  )
+
+# Check the structure of the summary_stats dataframe
+glimpse(summary_stats)
+
+```
+The `min_ride_length` has a negative value. Since a negative ride length is not possible and likely indicates errors in date recording, we will remove these erroneous records from the dataset.
+```
+# Remove rows where ride_length is negative
+bike_data_clean <- bike_data_clean %>%
+  filter(ride_length >= 0)
+  
+# Recompute summary statistics after removing negative ride lengths
+summary_stats_clean <- bike_data_clean %>%
+  group_by(member_casual) %>%
+  summarize(
+    mean_ride_length = mean(ride_length, na.rm = TRUE),
+    median_ride_length = median(ride_length, na.rm = TRUE),
+    sd_ride_length = sd(ride_length, na.rm = TRUE),
+    min_ride_length = min(ride_length, na.rm = TRUE),
+    max_ride_length = max(ride_length, na.rm = TRUE)
+  )
+
+# Check the structure of the summary_stats dataframe
+glimpse(summary_stats_clean)
+
+# ====================================================================================================================
+# Visualize
+
+# Extract hour of the day from started_at
+bike_data_clean <- bike_data_clean %>%
+  mutate(hour_of_day = hour(started_at),
+         day_of_week = wday(started_at, label = TRUE, abbr = TRUE))
+         
+# 1. Calculate average ride length by day of the week and member type
+ride_length_by_day <- bike_data_clean %>%
+  group_by(day_of_week, member_casual) %>%
+  summarise(avg_ride_length = mean(ride_length, na.rm = TRUE),
+            total_rides = n()) %>%
+  ungroup()
+  
+# Create a bar chart to compare average ride length by day of the week and user type
+p1 <- ggplot(ride_length_by_day, aes(x = factor(day_of_week, labels = c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")), y = avg_ride_length, fill = member_casual)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Average Ride Length by Day of the Week",
+       x = "Day of the Week",
+       y = "Average Ride Length (minutes)") +
+  theme_minimal() +
+  scale_fill_manual(values = c("casual" = "skyblue", "member" = "orange"))
+
+print(p1)
+
+# Save the plot as an image file
+ggsave("average_ride_length_by_day.png", plot = p1, width = 8, height = 6)
+  
+
+# 2. Examine Usage Trends by Day
+usage_by_day <- bike_data_clean %>%
+  mutate(day_of_week = wday(started_at, label = TRUE, abbr = TRUE)) %>%
+  group_by(day_of_week, member_casual) %>%
+  summarise(total_rides = n()) %>%
+  ungroup()
+  
+# Plot number of rides by day of the week
+p2 <- ggplot(usage_by_day, aes(x = day_of_week, y = total_rides, fill = member_casual)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_text(aes(label = total_rides), vjust = -0.5, position = position_dodge(0.9), size = 3) +
+  labs(title = "Number of Rides by Day of the Week",
+       x = "Day of the Week",
+       y = "Total Number of Rides") +
+  theme_minimal() +
+  scale_fill_manual(values = c("casual" = "skyblue", "member" = "orange"))
+
+# Display the plot
+print(p2)
+
+# Save the plot as an image file
+ggsave("number_of_rides_by_day_bar_chart.png", plot = p2, width = 8, height = 6)
+
+# 3. Calculate total number of rides by user type
+total_rides_by_user <- bike_data_clean %>%
+  group_by(member_casual) %>%
+  summarise(total_rides = n()) %>%
+  ungroup()
+
+# Plot total number of rides by user type
+p3 <- ggplot(total_rides_by_user, aes(x = member_casual, y = total_rides, fill = member_casual)) +
+  geom_bar(stat = "identity", width = 0.6) +
+  geom_text(aes(label = total_rides), vjust = -0.5, size = 5) +
+  labs(title = "Total Number of Rides by User Type",
+       x = "User Type",
+       y = "Total Number of Rides") +
+  theme_minimal() +
+  scale_fill_manual(values = c("casual" = "skyblue", "member" = "orange")) +
+  theme(legend.position = "none")
+
+# Display the plot
+print(p3)
+
+# Save the plot as an image file
+ggsave("total_number_of_rides_by_user_type.png", plot = p3, width = 8, height = 6)
+
+# 4. Calculate average ride length for each user group (casual vs member)
+average_ride_length_by_group <- bike_data_clean %>%
+  group_by(member_casual) %>%
+  summarise(avg_ride_length = mean(ride_length, na.rm = TRUE)) %>%
+  ungroup()
+
+# Plot average ride length by user group
+p4 <- ggplot(average_ride_length_by_group, aes(x = member_casual, y = avg_ride_length, fill = member_casual)) +
+  geom_bar(stat = "identity", width = 0.6) +
+  geom_text(aes(label = round(avg_ride_length, 2)), vjust = -0.5, size = 5) +
+  labs(title = "Average Ride Length by User Group (in Minutes)",
+       x = "User Type",
+       y = "Average Ride Length (Minutes)") +
+  theme_minimal() +
+  scale_fill_manual(values = c("casual" = "skyblue", "member" = "orange")) +
+  theme(legend.position = "none")
+
+# Display the plot
+print(p4)
+
+# Save the plot as an image file
+ggsave("average_ride_length_by_group.png", plot = p4, width = 8, height = 6)
+
+# 5. Calculate total number of rides by month and user type
+bike_data_clean <- bike_data_clean %>%
+  mutate(month = month(started_at, label = TRUE, abbr = TRUE))
+
+total_rides_by_month <- bike_data_clean %>%
+  group_by(month, member_casual) %>%
+  summarise(total_rides = n()) %>%
+  ungroup()
+
+# Plot total number of rides by month and user type
+p5 <- ggplot(total_rides_by_month, aes(x = month, y = total_rides, fill = member_casual)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Total Number of Rides by Month and User Type",
+       x = "Month",
+       y = "Total Number of Rides") +
+  theme_minimal() +
+  scale_fill_manual(values = c("casual" = "skyblue", "member" = "orange"))
+
+# Display the plot
+print(p5)
+
+# Save the plot as an image file
+ggsave("total_rides_by_month.png", plot = p5, width = 8, height = 6)
+
+# 6. Calculate average ride length by month and user type
+bike_data_clean <- bike_data_clean %>%
+  mutate(month = month(started_at, label = TRUE, abbr = TRUE))
+
+average_ride_length_by_month <- bike_data_clean %>%
+  group_by(month, member_casual) %>%
+  summarise(avg_ride_length = mean(ride_length, na.rm = TRUE)) %>%
+  ungroup()
+
+# Plot average ride length by month and user type using a bar chart
+p6_bar <- ggplot(average_ride_length_by_month, aes(x = month, y = avg_ride_length, fill = member_casual)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Average Ride Length by Month and User Type",
+       x = "Month",
+       y = "Average Ride Length (Minutes)") +
+  theme_minimal() +
+  scale_fill_manual(values = c("casual" = "skyblue", "member" = "orange"))
+
+# Display the plot
+print(p6_bar)
+
+# Save the plot as an image file
+ggsave("average_ride_length_by_month_bar.png", plot = p6_bar, width = 8, height = 6)
+
+
+# 7. Number of Rides by Bike Type and Customer Type
+rides_by_bike_type <- bike_data_clean %>%
+  group_by(rideable_type, member_casual) %>%
+  summarise(total_rides = n()) %>%
+  ungroup()
+
+# Plot the number of rides by bike type and customer type
+p7 <- ggplot(rides_by_bike_type, aes(x = rideable_type, y = total_rides, fill = member_casual)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Number of Rides by Bike Type and Customer Type",
+       x = "Bike Type",
+       y = "Total Number of Rides") +
+  theme_minimal() +
+  scale_fill_manual(values = c("casual" = "skyblue", "member" = "orange"))
+
+# Display the plot
+print(p7)
+
+# Save the plot
+ggsave("rides_by_bike_type.png", plot = p7, width = 8, height = 6)
