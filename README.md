@@ -8,7 +8,6 @@
 How_does_a_bike-share_navigate_speedy_success/
 │
 ├── README.md                            # Project overview and findings
-├── data/                                # Data files used in the analysis (optional)
 ├── images/                              # Visualizations generated from the analysis
 ├── Cyclistic_Bike_Share_Analysis.Rmd    # The single R script containing data loading, cleaning, analysis, and visualizations
 ```
