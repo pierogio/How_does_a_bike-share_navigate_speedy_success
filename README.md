@@ -3,6 +3,7 @@
 [![forthebadge made-with-R](https://img.shields.io/badge/Made%20with-R-blue?style=for-the-badge&logo=R)](https://www.r-project.org/)
 [![forthebadge made-with-RStudio](https://img.shields.io/badge/Made%20with-RStudio-blue?style=for-the-badge&logo=RStudio)](https://www.rstudio.com/)
 
+```bash
 ## Project Structure
 How_does_a_bike-share_navigate_speedy_success/
 │
@@ -10,7 +11,7 @@ How_does_a_bike-share_navigate_speedy_success/
 ├── data/                                # Data files used in the analysis (optional)
 ├── images/                              # Visualizations generated from the analysis
 ├── Cyclistic_Bike_Share_Analysis.Rmd    # The single R script containing data loading, cleaning, analysis, and visualizations
-
+```
 ### Introduction
 
 Welcome to this Cyclistic bike-share analysis project! In this case study, I step into the role of a junior data analyst for the fictional company Cyclistic. The goal of this project is to solve key business questions using real-world data. I'll be following the complete data analysis process—asking questions, preparing and analyzing data, and sharing insights to drive business decisions.
